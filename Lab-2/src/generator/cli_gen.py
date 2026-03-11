@@ -11,6 +11,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 CSV_PATH = os.path.join(DATA_DIR, 'booking_data.csv')
 
+def pad_row(row, length=11):
+    """Функція, яка автоматично додає порожні клітинки до 11 колонок"""
+    while len(row) < length:
+        row.append('')
+    return row
+
 def generate_csv_data(num_rows: int = 1000):
     os.makedirs(DATA_DIR, exist_ok=True)
     
@@ -61,12 +67,14 @@ def generate_csv_data(num_rows: int = 1000):
         rows_written = 0
         
         for h in hotels:
-            writer.writerow(['HOTEL', h['hotel_id'], h['hotel_name'], h['star_rating'], 
-                             h['chain_id'], h['chain_name'], h['chain_hq'],
-                             h['location_id'], h['country'], h['city'], h['address'][:50]]) 
+            row = ['HOTEL', h['hotel_id'], h['hotel_name'], h['star_rating'], 
+                   h['chain_id'], h['chain_name'], h['chain_hq'],
+                   h['location_id'], h['country'], h['city'], h['address'][:50]]
+            writer.writerow(pad_row(row)) 
 
         for u in users:
-            writer.writerow(['USER', u['user_id'], u['user_name'], u['email'], u['user_type'], '', '', '', '', ''])
+            row = ['USER', u['user_id'], u['user_name'], u['email'], u['user_type']]
+            writer.writerow(pad_row(row))
             rows_written += 1
             
         while rows_written < num_rows:
@@ -80,16 +88,18 @@ def generate_csv_data(num_rows: int = 1000):
                 
                 if room_type == 'standard':
                     has_balcony = random.choice(['True', 'False'])
-                    writer.writerow(['ROOM', room_id, hotel['hotel_id'], price, is_avail, room_type, has_balcony, '', '', ''])
+                    row = ['ROOM', room_id, hotel['hotel_id'], price, is_avail, room_type, has_balcony]
                 else:
                     bedrooms = random.randint(1, 4)
-                    writer.writerow(['ROOM', room_id, hotel['hotel_id'], price, is_avail, room_type, bedrooms, '', '', ''])
+                    row = ['ROOM', room_id, hotel['hotel_id'], price, is_avail, room_type, bedrooms]
+                writer.writerow(pad_row(row))
             else:
                 guest = random.choice(guests)
                 review_id = str(uuid.uuid4())
                 rating = random.randint(1, 10)
                 comment = fake.sentence()
-                writer.writerow(['REVIEW', review_id, hotel['hotel_id'], guest['user_id'], rating, comment, '', '', '', ''])
+                row = ['REVIEW', review_id, hotel['hotel_id'], guest['user_id'], rating, comment]
+                writer.writerow(pad_row(row))
                 
             rows_written += 1
 
