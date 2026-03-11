@@ -89,6 +89,4 @@ python verify_db.py
 ```
 
 ---
-python verify_db.py
 
----
