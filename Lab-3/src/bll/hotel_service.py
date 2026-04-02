@@ -51,3 +51,16 @@ class HotelService:
             session.delete(hotel)
             session.commit()
         session.close()
+
+    def get_hotels_for_export(self):
+        """Готує дані у вигляді словника для експорту"""
+        hotels = self.get_all_hotels()
+        result = []
+        for h in hotels:
+            result.append({
+                "name": h.name,
+                "star_rating": h.starRating,
+                "country": h.location.country,
+                "city": h.location.city
+            })
+        return result
