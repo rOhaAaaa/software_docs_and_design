@@ -1,0 +1,8 @@
+{
+    "output_strategy": "console", 
+    "dataset_path": "data/crimes.csv",
+    "kafka_broker": "localhost:9092",
+    "kafka_topic": "crimes_topic",
+    "redis_host": "localhost",
+    "redis_port": 6379
+}
